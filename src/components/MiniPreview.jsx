@@ -1,28 +1,31 @@
 import { Box, Typography } from "@mui/material";
 import { MapContainer, TileLayer } from "react-leaflet";
+import { motion } from "framer-motion";
 
-const MiniPreview = ({ viewMode, setViewMode, open }) => {
+const MotionBox = motion(Box);
+
+const MiniPreview = ({ viewMode, setViewMode }) => {
     const handleClick = () => {
         setViewMode(viewMode === "map" ? "3d" : "map");
     };
 
     return (
-        <Box
-            onClick={handleClick}
-            sx={{
+        <MotionBox
+            drag
+            dragMomentum={false}
+            onTap={handleClick}
+            initial={{ x: 16, y: 16 }}
+            style={{
                 position: "absolute",
-                bottom: 16,
-                left: open ? 316 : 16,
                 width: 200,
                 height: 150,
                 border: "2px solid white",
-                borderRadius: 2,
+                borderRadius: 8,
                 overflow: "hidden",
-                cursor: "pointer",
+                cursor: "grab",
                 zIndex: 1200,
                 backgroundColor: "white",
-                boxShadow: 3,
-                transition: "left 0.3s ease",
+                boxShadow: "0px 4px 12px rgba(0,0,0,0.2)"
             }}
         >
             {viewMode === "map" ? (
@@ -49,6 +52,7 @@ const MiniPreview = ({ viewMode, setViewMode, open }) => {
                     <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                 </MapContainer>
             )}
+
             <Typography
                 variant="caption"
                 sx={{
@@ -63,7 +67,7 @@ const MiniPreview = ({ viewMode, setViewMode, open }) => {
             >
                 Clic per vista {viewMode === "map" ? "3D" : "Mappa"}
             </Typography>
-        </Box>
+        </MotionBox>
     );
 };
 

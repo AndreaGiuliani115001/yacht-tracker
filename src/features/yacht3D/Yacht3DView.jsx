@@ -73,7 +73,7 @@ const Yacht3DView = ({ forzaGHistory }) => {
             </div>
 
             {/* Grafico Forza G */}
-            <div style={{ height: 220, paddingBottom: '2', boxSizing: 'border-box' }}>
+            <div style={{ height: 300, boxSizing: 'border-box' }}>
                 <ForceChart data={forzaGHistory} />
             </div>
         </div>
