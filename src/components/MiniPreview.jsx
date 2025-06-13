@@ -1,7 +1,4 @@
-import React from "react";
 import { Box, Typography } from "@mui/material";
-import { Canvas } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
 import { MapContainer, TileLayer } from "react-leaflet";
 
 const MiniPreview = ({ viewMode, setViewMode, open }) => {
@@ -15,7 +12,7 @@ const MiniPreview = ({ viewMode, setViewMode, open }) => {
             sx={{
                 position: "absolute",
                 bottom: 16,
-                left: open ? 316 : 16, // 300 (drawer) + 16 (padding)
+                left: open ? 316 : 16,
                 width: 200,
                 height: 150,
                 border: "2px solid white",
@@ -29,15 +26,16 @@ const MiniPreview = ({ viewMode, setViewMode, open }) => {
             }}
         >
             {viewMode === "map" ? (
-                <Canvas camera={{ position: [0, 2, 5] }}>
-                    <ambientLight />
-                    <pointLight position={[10, 10, 10]} />
-                    <mesh rotation={[0, 0.5, 0]}>
-                        <boxGeometry args={[1, 0.5, 2]} />
-                        <meshStandardMaterial color="royalblue" />
-                    </mesh>
-                    <OrbitControls enableZoom={false} />
-                </Canvas>
+                <Box
+                    sx={{
+                        width: "100%",
+                        height: "100%",
+                        backgroundImage: 'url("/boat.png")',
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                    }}
+                />
             ) : (
                 <MapContainer
                     center={[41.9028, 12.4964]}
@@ -48,9 +46,7 @@ const MiniPreview = ({ viewMode, setViewMode, open }) => {
                     scrollWheelZoom={false}
                     style={{ width: "100%", height: "100%" }}
                 >
-                    <TileLayer
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    />
+                    <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                 </MapContainer>
             )}
             <Typography
@@ -70,6 +66,5 @@ const MiniPreview = ({ viewMode, setViewMode, open }) => {
         </Box>
     );
 };
-
 
 export default MiniPreview;

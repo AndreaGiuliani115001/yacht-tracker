@@ -16,6 +16,8 @@
     "@mui/material": "^7.1.1",
     "@react-three/drei": "^10.2.0",
     "@react-three/fiber": "^9.1.2",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
     "leaflet": "^1.9.4",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

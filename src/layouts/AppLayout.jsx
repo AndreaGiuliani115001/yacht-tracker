@@ -7,7 +7,7 @@ import MiniPreview from "../components/MiniPreview";
 
 const drawerWidth = 300;
 
-const AppLayout = ({children, open, setOpen, viewMode, setViewMode}) => {
+const AppLayout = ({children, open, setOpen, viewMode, setViewMode, data}) => {
 
     const toggleDrawer = () => {
         setOpen(!open);
@@ -20,7 +20,8 @@ const AppLayout = ({children, open, setOpen, viewMode, setViewMode}) => {
                 <Box
                     sx={{
                         width: drawerWidth,
-                        backgroundColor: '#f4f4f4',
+                        backgroundColor: '##e0e0e0',
+                        color: '#eeeeee', // 👈 aggiunto
                         boxSizing: 'border-box',
                         padding: 2,
                     }}
@@ -34,17 +35,17 @@ const AppLayout = ({children, open, setOpen, viewMode, setViewMode}) => {
                     <Typography variant="h6" gutterBottom>
                         Dati Yacht
                     </Typography>
-                    <Typography variant="body2">Velocità: --</Typography>
-                    <Typography variant="body2">Altitudine: --</Typography>
-                    <Typography variant="body2">Direzione: --</Typography>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => setViewMode(viewMode === 'map' ? '3d' : 'map')}
-                        sx={{mt: 2}}
-                    >
-                        {viewMode === 'map' ? 'Passa alla Vista 3D' : 'Passa alla Mappa'}
-                    </Button>
+                    <Typography variant="body2">Velocità: {data?.velocita ?? '--'} nodi</Typography>
+                    <Typography variant="body2">Direzione bussola: {data?.direzione_bussola ?? '--'}°</Typography>
+                    <Typography variant="body2">Stato: {data?.stato ?? '--'}</Typography>
+                    <Typography variant="body2">Voltaggio: {data?.tensione ?? '--'} V</Typography>
+                    <Typography variant="body2">Accensione: {data?.accensione ? 'Attiva' : 'Spenta'}</Typography>
+                    <Typography variant="body2">
+                        Posizione: {data?.posizione?.lat?.toFixed(5) ?? '--'}, {data?.posizione?.lon?.toFixed(5) ?? '--'}
+                    </Typography>
+                    <Typography variant="body2">
+                        Ultimo aggiornamento: {data?.ultimo_aggiornamento ? new Date(data.ultimo_aggiornamento).toLocaleTimeString() : '--'}
+                    </Typography>
 
                 </Box>
             )}

@@ -1,33 +1,63 @@
-import React from 'react';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import React, { useRef, useEffect, Suspense } from 'react';
+import { Canvas, useThree } from '@react-three/fiber';
+import { OrbitControls, useGLTF } from '@react-three/drei';
+import { Box3, Vector3 } from 'three';
 
-const Yacht3DModel = () => {
+function Yacht3DModel({ onCenterCalculated }) {
+    const group = useRef();
+    const gltf = useGLTF("/models/yachtClaudioNoTexture.glb");
+
+    const { scene } = gltf;
+
+    useEffect(() => {
+        if (group.current) {
+            const box = new Box3().setFromObject(group.current);
+            const center = new Vector3();
+            box.getCenter(center);
+            const size = new Vector3();
+            box.getSize(size);
+
+            // Centra l'oggetto
+            group.current.position.sub(center);
+
+            // Comunica al parent dove si trova il centro del modello
+            onCenterCalculated(center);
+        }
+    }, [scene, onCenterCalculated]);
+
+    return <primitive ref={group} object={scene} />;
+}
+
+function YachtScene() {
+    const controlsRef = useRef();
+    const { camera } = useThree();
+
+    const handleCenterCalculated = (center) => {
+        if (controlsRef.current) {
+            controlsRef.current.target.copy(center);
+            controlsRef.current.update();
+        }
+
+        camera.lookAt(center);
+    };
+
     return (
-        <group>
-            {/* Ponte (box) */}
-            <mesh position={[0, 0.5, 0]}>
-                <boxGeometry args={[4, 1, 2]} />
-                <meshStandardMaterial color="#4a90e2" />
-            </mesh>
-
-            {/* Motore (cilindro) */}
-            <mesh position={[0, -0.5, 1]}>
-                <cylinderGeometry args={[0.3, 0.3, 1, 32]} rotation={[Math.PI / 2, 0, 0]} />
-                <meshStandardMaterial color="#ff6f61" />
-            </mesh>
-        </group>
+        <>
+            <ambientLight intensity={0.5} />
+            <directionalLight position={[5, 5, 5]} intensity={0.7} />
+            <Suspense fallback={null}>
+                <Yacht3DModel onCenterCalculated={handleCenterCalculated} />
+            </Suspense>
+            <OrbitControls ref={controlsRef} enablePan={false} />
+        </>
     );
-};
+}
 
 const Yacht3DView = () => {
     return (
         <div style={{ height: '100%', width: '100%' }}>
             <Canvas camera={{ position: [6, 3, 6], fov: 50 }}>
-                <ambientLight intensity={0.5} />
-                <directionalLight position={[5, 5, 5]} intensity={0.7} />
-                <Yacht3DModel />
-                <OrbitControls enablePan={false} target={[0, 0.5, 0]} />
+                <YachtScene />
             </Canvas>
         </div>
     );

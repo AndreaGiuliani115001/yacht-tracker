@@ -5,24 +5,27 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import MapAutoResize from './MapAutoResize';
 import { ZoomControl } from 'react-leaflet';
+import { Polyline } from 'react-leaflet';
 
-
-// Fix icone Leaflet
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-    iconRetinaUrl: new URL('leaflet/dist/images/marker-icon-2x.png', import.meta.url).href,
-    iconUrl: new URL('leaflet/dist/images/marker-icon.png', import.meta.url).href,
-    shadowUrl: new URL('leaflet/dist/images/marker-shadow.png', import.meta.url).href,
+const yachtIcon = new L.Icon({
+    iconUrl: '/iconYacht.svg', // relativo a /public
+    iconSize: [40, 40],          // o 32x32, dipende dalla tua immagine
+    iconAnchor: [20, 20],        // punto al centro dell'icona
+    popupAnchor: [0, -20],       // popup sopra l’icona
 });
 
-const MapView = ({ sidebarOpen }) => {
-    const position = [42.0, 12.0]; // Mock position
+
+const MapView = ({ sidebarOpen, data, route }) => {
+    const position = data?.posizione
+        ? [data.posizione.lat, data.posizione.lon]
+        : [42.0, 12.0]; // fallback iniziale
+
 
     return (
         <Box sx={{ height: '100%', width: '100%' }}>
             <MapContainer
-                key={sidebarOpen ? 'open' : 'closed'}
                 center={position}
+                key="yacht-map"
                 zoom={6}
                 zoomControl={false}
                 style={{ height: '100%', width: '100%' }}
@@ -35,9 +38,19 @@ const MapView = ({ sidebarOpen }) => {
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution='&copy; OpenStreetMap'
                 />
-                <Marker position={position}>
-                    <Popup>Yacht mock - posizione iniziale</Popup>
+                <Marker position={position} icon={yachtIcon}>
+                    <Popup>
+                        Yacht<br />
+                        Lat: {position[0].toFixed(5)}<br />
+                        Lon: {position[1].toFixed(5)}
+                    </Popup>
                 </Marker>
+                {route.length > 1 && (
+                    <Polyline
+                        positions={route}
+                        pathOptions={{ color: 'blue', weight: 3 }}
+                    />
+                )}
             </MapContainer>
         </Box>
     );
