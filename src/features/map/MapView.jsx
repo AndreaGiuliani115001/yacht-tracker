@@ -36,7 +36,11 @@ const MapView = ({ sidebarOpen, data, route }) => {
                 <MapAutoResize dependency={sidebarOpen} />
                 <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    attribution='&copy; OpenStreetMap'
+                    attribution="&copy; OpenStreetMap"
+                />
+                <TileLayer
+                    url="https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png"
+                    attribution="&copy; OpenSeaMap contributors"
                 />
                 <Marker position={position} icon={yachtIcon}>
                     <Popup>

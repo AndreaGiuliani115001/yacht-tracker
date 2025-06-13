@@ -19,6 +19,7 @@ app.get('/yacht-data', (req, res) => {
             lat: 42.123 + Math.random() * 0.01,
             lon: 11.234 + Math.random() * 0.01
         },
+        forza_g: (Math.random() * 0.5).toFixed(2),
         ultimo_aggiornamento: now.toISOString()
     };
 

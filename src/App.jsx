@@ -10,7 +10,7 @@ function App() {
     const [openSidebar, setOpenSidebar] = useState(true);
     const [viewMode, setViewMode] = useState('map');
     const [route, setRoute] = useState([]);
-    const { data } = useYachtData();
+    const { data, forzaGHistory  } = useYachtData();
 
     useEffect(() => {
         if (data?.posizione?.lat && data?.posizione?.lon) {
@@ -29,7 +29,7 @@ function App() {
 
     const renderView = () => {
         if (viewMode === 'map') return <MapView sidebarOpen={openSidebar} data={data}  route={route}/>;
-        if (viewMode === '3d') return <Yacht3DView data={data} />;
+        if (viewMode === '3d') return <Yacht3DView data={data} forzaGHistory={forzaGHistory}/>;
         return null;
     };
 
@@ -41,6 +41,7 @@ function App() {
             viewMode={viewMode}
             setViewMode={setViewMode}
             data={data}
+            forzaGHistory={forzaGHistory}
         >
             {renderView()}
 
